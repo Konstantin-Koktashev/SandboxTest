@@ -7,7 +7,7 @@ import {
   actionTypes as rrfActionTypes,
 } from "react-redux-firebase";
 import { actionTypes as rfActionTypes } from "redux-firestore";
-
+import { creatNewUser } from '../features/user/userSlice'
 import {
   firebaseReducer
 } from 'react-redux-firebase'
@@ -24,6 +24,7 @@ const customizedMiddleware = getDefaultMiddleware({
           (key) => `@@reactReduxFirebase/${key}`
         ),
         ...Object.keys(rfActionTypes).map((key) => `@@reduxFirestore/${key}`),
+        creatNewUser.fulfilled.type
       ],
       ignoredPaths: ["firebase", "firestore"],
     },
