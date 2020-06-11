@@ -2,11 +2,14 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import boardReducer from '../features/boards/boardSlice'
 import userReducer from '../features/user/userSlice'
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
 import {
-  firebaseReducer, getFirebase
+  getFirebase,
+  actionTypes as rrfActionTypes,
+} from "react-redux-firebase";
+import { actionTypes as rfActionTypes } from "redux-firestore";
+
+import {
+  firebaseReducer
 } from 'react-redux-firebase'
 import { firestoreReducer } from 'redux-firestore'
 import {logger} from 'redux-logger'
@@ -14,7 +17,16 @@ import {logger} from 'redux-logger'
 const customizedMiddleware = getDefaultMiddleware({
   thunk: {
     extraArgument: getFirebase
-  }
+  },
+  serializableCheck: {
+      ignoredActions: [
+        ...Object.keys(rrfActionTypes).map(
+          (key) => `@@reactReduxFirebase/${key}`
+        ),
+        ...Object.keys(rfActionTypes).map((key) => `@@reduxFirestore/${key}`),
+      ],
+      ignoredPaths: ["firebase", "firestore"],
+    },
 })
 
 
