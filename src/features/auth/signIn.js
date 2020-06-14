@@ -56,6 +56,7 @@ export default function SignIn() {
   const { register, handleSubmit, errors } = useForm();
 const firebase=useFirebase()
   const handleLogin=async(data)=>{
+    console.log('user login credentials',data)
     const{email,password}=data
        try {
        await dispatch(signIn({email,password}))
