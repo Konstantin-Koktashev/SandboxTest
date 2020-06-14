@@ -1,13 +1,11 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import boardReducer from '../features/boards/boardSlice'
-import userReducer from '../features/user/userSlice'
+import authReducer from '../features/auth/authSlice'
 import {
   getFirebase,
   actionTypes as rrfActionTypes,
 } from "react-redux-firebase";
-import { actionTypes as rfActionTypes } from "redux-firestore";
-import { creatNewUser } from '../features/user/userSlice'
 import {
   firebaseReducer
 } from 'react-redux-firebase'
@@ -29,7 +27,7 @@ const customizedMiddleware = getDefaultMiddleware({
 export default configureStore({
   reducer: {
     counter: counterReducer,
-    user:userReducer,
+    auth:authReducer,
     boards:boardReducer,
     firebase: firebaseReducer,
     fireStore: firestoreReducer

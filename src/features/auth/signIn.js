@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
-import { signIn } from './userSlice';
+import { signIn } from './authSlice';
 import { useFirebase } from 'react-redux-firebase';
 
 function Copyright() {
@@ -58,7 +58,7 @@ const firebase=useFirebase()
   const handleLogin=async(data)=>{
     const{email,password}=data
        try {
-        await dispatch(signIn({email,password}))
+       await dispatch(signIn({email,password}))
         // await firebase.login({email,password})
        } catch (error) {
          console.log('firebase login error',error)
@@ -128,7 +128,7 @@ const firebase=useFirebase()
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

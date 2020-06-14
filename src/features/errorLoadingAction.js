@@ -13,3 +13,10 @@ export const handleLoading=(state, action) => {
       state.currentRequestId = undefined
     }
   }
+  export const handleFulfilled= (state,action)=>{
+    const { requestId } = action.meta
+    if (state.loading === 'pending' && state.currentRequestId === requestId) {
+      state.loading = 'idle'
+      state.currentRequestId = undefined
+    }
+  }

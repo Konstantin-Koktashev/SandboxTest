@@ -5,23 +5,12 @@ import './App.css';
 import { useDispatch } from 'react-redux';
 import { insertOne, boardAdded } from './features/boards/boardSlice'
 import { Route, Switch } from 'react-router-dom';
-import SignUp from './features/user/Signup';
-import SignIn from './features/user/signIn';
-import Home from './features/user/Home';
+import SignUp from './features/auth/Signup';
+import SignIn from './features/auth/signIn';
+import Home from './features/auth/Home';
 function App() {
 
-  // const todo={number:3,id:Math.random()}
-  // const dispatch=useDispatch()
-  // const test=async()=>{
 
-  // try {
-  //   await dispatch(insertOne(todo))
-  //   dispatch(boardAdded(todo))
-  // } catch (error) {
-  //   console.log(error)
-  // }
-  // }
-  // test()
 
   return (
     <div className="App">

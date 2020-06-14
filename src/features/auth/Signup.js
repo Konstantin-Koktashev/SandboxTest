@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useForm } from "react-hook-form";
-import { creatNewUser } from './userSlice';
+import { creatNewUser } from './authSlice';
 import { useDispatch } from 'react-redux';
 const { v4: uuidv4 } = require('uuid');
 
@@ -59,8 +59,8 @@ export default function SignUp() {
     const onSubmit =async userData => {
         userData={id:uuidv4(),...userData,}
         try {
-            const newUser=await dispatch(creatNewUser(userData))
-            console.log('this is userrrrrrr',newUser)
+            await dispatch(creatNewUser(userData))
+
         } catch (error) {
             console.log('couldnt add user',error)
         }
@@ -141,7 +141,7 @@ export default function SignUp() {
                                     required: true,
                                     pattern:{
                                         value: /^(?=.*\d).{4,8}$/,
-                                        message: "password must contain four numbers/letters "
+                                        message: "password must contain six numbers/letters "
 
                                     }
                                 })}

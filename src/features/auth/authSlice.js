@@ -1,31 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { useFirestore } from 'react-redux-firebase';
 import { useFirebase } from 'react-redux-firebase'
-import { handleLoading, handleError } from '../errorLoadingAction';
+import { handleLoading, handleError,handleFulfilled } from '../errorLoadingAction';
 
 export const creatNewUser = createAsyncThunk(
     'firbase/signup',
     async (user, { getState, requestId, extra: getFirebase }) => {
         const { email, password, firstName, lastName } = user
-        const { currentRequestId, loading } = getState().user
+        const { currentRequestId, loading } = getState().auth
         if (loading !== 'pending' || requestId !== currentRequestId) {
             return
         }
         const firebase=getFirebase()
-        
-        const newUser= firebase.createUser(
+        await firebase.createUser(
             { email, password },
             { firstName, lastName,email}
         )
       
-        return newUser
+        
     }
 )
 export const signIn = createAsyncThunk(
     'firbase/user/login',
     async (credentials, { getState, requestId, extra: getFirebase }) => {
         const { email, password} = credentials
-        const { currentRequestId, loading } = getState().user
+        const { currentRequestId, loading } = getState().auth
         if (loading !== 'pending' || requestId !== currentRequestId) {
             return
         }
@@ -38,7 +37,7 @@ export const signIn = createAsyncThunk(
     }
 )
 
-export const userSlice = createSlice({
+export const authSlice = createSlice({
     name: 'users',
     initialState: {
         currUser: null,
@@ -52,19 +51,15 @@ export const userSlice = createSlice({
     extraReducers: {
         [creatNewUser.pending]:handleLoading,
         [creatNewUser.rejected]:handleError,
-        [creatNewUser.fulfilled]:(state,action)=>{
-            state.currUser=action.payload
-        },
+        [creatNewUser.fulfilled]:handleFulfilled,
         [signIn.pending]:handleLoading,
         [signIn.rejected]:handleError,
-        [signIn.fulfilled]:(state,action)=>{
-            state.currUser=action.payload
-        },
+        [signIn.fulfilled]:handleFulfilled,
 
 
     }
 
 })
-export const { } = userSlice.actions;
+export const { } = authSlice.actions;
 
-export default userSlice.reducer;
+export default authSlice.reducer;
