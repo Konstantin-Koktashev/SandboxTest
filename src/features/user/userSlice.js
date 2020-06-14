@@ -1,41 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { useFirestore } from 'react-redux-firebase';
 import { useFirebase } from 'react-redux-firebase'
-// import { handleLoading, handleError } from '../errorLoadingAction';
-export const handleLoading=(state, action) => {
-    
-    if (state.loading === 'idle') {
-        state.loading = 'pending'
-        state.currentRequestId = action.meta.requestId
-      }
-  }
-  export const handleError=(state, action) => {
-    const { requestId } = action.meta
-    if (state.loading === 'pending' && state.currentRequestId === requestId) {
-      state.loading = 'idle'
-      state.error = action.error
-      state.currentRequestId = undefined
-    }
-  }
-
+import { handleLoading, handleError } from '../errorLoadingAction';
 
 export const creatNewUser = createAsyncThunk(
     'firbase/signup',
     async (user, { getState, requestId, extra: getFirebase }) => {
-        
-        // const firebase = useFirebase()
-        // console.log('im hereeeeeeee',firebase)
         const { email, password, firstName, lastName } = user
         const { currentRequestId, loading } = getState().user
         if (loading !== 'pending' || requestId !== currentRequestId) {
             return
         }
-        const newUser= getFirebase().createUser(
+        const firebase=getFirebase()
+        
+        const newUser= firebase.createUser(
             { email, password },
             { firstName, lastName,email}
         )
       
         return newUser
+    }
+)
+export const signIn = createAsyncThunk(
+    'firbase/user/login',
+    async (credentials, { getState, requestId, extra: getFirebase }) => {
+        const { email, password} = credentials
+        const { currentRequestId, loading } = getState().user
+        if (loading !== 'pending' || requestId !== currentRequestId) {
+            return
+        }
+        const firebase=getFirebase()
+        await firebase.login(
+           {email,password}
+        )
+      
+      
     }
 )
 
@@ -55,7 +54,13 @@ export const userSlice = createSlice({
         [creatNewUser.rejected]:handleError,
         [creatNewUser.fulfilled]:(state,action)=>{
             state.currUser=action.payload
-        }
+        },
+        [signIn.pending]:handleLoading,
+        [signIn.rejected]:handleError,
+        [signIn.fulfilled]:(state,action)=>{
+            state.currUser=action.payload
+        },
+
 
     }
 

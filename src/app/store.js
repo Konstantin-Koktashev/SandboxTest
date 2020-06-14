@@ -18,16 +18,10 @@ const customizedMiddleware = getDefaultMiddleware({
   thunk: {
     extraArgument: getFirebase
   },
-  serializableCheck: {
-      ignoredActions: [
-        ...Object.keys(rrfActionTypes).map(
-          (key) => `@@reactReduxFirebase/${key}`
-        ),
-        ...Object.keys(rfActionTypes).map((key) => `@@reduxFirestore/${key}`),
-        creatNewUser.fulfilled.type
-      ],
-      ignoredPaths: ["firebase", "firestore"],
-    },
+  serializableCheck: false,
+  immutableCheck: {
+    ignoredPaths: ["user"]
+  }
 })
 
 

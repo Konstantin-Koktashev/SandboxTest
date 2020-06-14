@@ -12,6 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useForm } from "react-hook-form";
+import { useDispatch } from 'react-redux';
+import { signIn } from './userSlice';
+import { useFirebase } from 'react-redux-firebase';
 
 function Copyright() {
   return (
@@ -48,9 +52,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
-    const handleLogin=(data)=>{
-        console.log(data)
+  const dispatch =useDispatch()
+  const { register, handleSubmit, errors } = useForm();
+const firebase=useFirebase()
+  const handleLogin=async(data)=>{
+    const{email,password}=data
+       try {
+        await dispatch(signIn({email,password}))
+        // await firebase.login({email,password})
+       } catch (error) {
+         console.log('firebase login error',error)
+       }
     }
+  // const onSubmit = data => console.log(data);
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -61,7 +76,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit(handleLogin)}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -72,6 +87,9 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            inputRef={register({
+              required: true
+          })}
           />
           <TextField
             variant="outlined"
@@ -83,7 +101,12 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            inputRef={register({
+              required: true
+          })}
+          
           />
+           {errors.password && errors.password.message}
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
@@ -94,7 +117,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleLogin}
+            // onClick={handleLogin}
           >
             Sign In
           </Button>

@@ -54,10 +54,6 @@ export default function SignUp() {
     const classes = useStyles();
     const dispatch =useDispatch()
 
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const { register, handleSubmit, errors } = useForm();
    
     const onSubmit =async userData => {
